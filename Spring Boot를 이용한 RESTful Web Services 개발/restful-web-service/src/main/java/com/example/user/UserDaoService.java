@@ -2,6 +2,7 @@ package com.example.user;
 
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.Iterator;
 import java.util.List;
 
 public class UserDaoService {
@@ -30,6 +31,26 @@ public class UserDaoService {
     public User findOne(int id) {
         for (User user : users) {
             if(user.getId() == id) {
+                return user;
+            }
+        }
+        return null;
+    }
+
+    public User updateUser(int id, User user){
+        User updateUser = findOne(id);
+        if(updateUser != null){
+            updateUser.setName(user.getName());
+        }
+        return updateUser;
+    }
+
+    public User deleteById(int id) {
+        Iterator<User> iterator = users.iterator();
+        while(iterator.hasNext()) {
+            User user = iterator.next();
+            if(user.getId() == id) {
+                iterator.remove();
                 return user;
             }
         }
