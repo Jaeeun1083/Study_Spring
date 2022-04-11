@@ -1,5 +1,6 @@
 package com.example.user;
 
+import com.fasterxml.jackson.annotation.JsonFilter;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 
@@ -9,6 +10,8 @@ import java.util.Date;
 
 @Data
 @AllArgsConstructor
+// @JsonIgnoreProperties(value = ("password"))
+@JsonFilter("UserInfo")
 public class User {
 
     private Integer id;
@@ -16,5 +19,7 @@ public class User {
     private String name;
     @Past
     private Date joinDate;
+    private String password;
+    private String ssn;
 
 }
