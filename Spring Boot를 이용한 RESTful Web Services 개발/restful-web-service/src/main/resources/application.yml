@@ -1,3 +1,8 @@
 logging:
   level:
     org.springframework: DEBUG
+
+# 다국어 리소스 파일 명 지정
+spring:
+  messages:
+    basename: messages
