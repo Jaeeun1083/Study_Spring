@@ -1,5 +1,7 @@
 package com.example.user;
 
+import org.springframework.hateoas.EntityModel;
+import org.springframework.hateoas.server.mvc.WebMvcLinkBuilder;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
@@ -7,6 +9,9 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import javax.validation.Valid;
 import java.net.URI;
 import java.util.List;
+
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 
 @RestController
 public class UserController {
@@ -23,12 +28,19 @@ public class UserController {
     }
 
     @GetMapping("/users/{id}")
-    public User retrieveUser(@PathVariable int id) {
+    public EntityModel<User> retrieveUser(@PathVariable int id) {
         User user = service.findOne(id);
         if(user == null) {
             throw new UserNotFoundException(String.format("ID[%s] not found", id));
         }
-        return user;
+        /*
+            HATEOAS
+        */
+        EntityModel<User> entityModel = EntityModel.of(user);
+        WebMvcLinkBuilder linkTo = linkTo(  // 유저값을 반환시킬 때 유저가 사용할 수 있는 추가적인 정보 링크를 하이퍼링크 타입으로 넣음
+                methodOn(this.getClass()).retrieveAllUsers()); // this 클래스가 가진 메서드 중 retrieveAllUsers를 연동시킴
+        entityModel.add(linkTo.withRel("all-users")); // 어떤 uri 값과 연동시킬지 결정
+        return entityModel;
     }
 
     @PostMapping("/users") //Restful API를 설계할 때 복수형 설계 권장. 단일 객체만을 위한 URI이 아니라, USERS라는 데이터 리소스에 새로운 목록의 데이터를 추가하기 위한 API 이므로
