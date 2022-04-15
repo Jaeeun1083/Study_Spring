@@ -38,6 +38,9 @@ dependencies {
 	// Swagger
 	implementation 'io.springfox:springfox-swagger2:3.0.0'
 	implementation 'io.springfox:springfox-swagger-ui:3.0.0'
+
+	// Actuator
+	implementation group: 'org.springframework.boot', name: 'spring-boot-starter-actuator'
 }
 
 tasks.named('test') {
